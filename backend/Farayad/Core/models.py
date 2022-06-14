@@ -107,3 +107,17 @@ class Comment(models.Model):
         return f'{self.course.header}:{self.user}'
 
 
+class News(models.Model):
+    header= models.CharField(max_length=120, unique=True, blank=False, null=False)
+    description= QuillField()
+    author= models.ForeignKey(User, on_delete=models.CASCADE, )
+    logo=models.CharField(max_length=400, blank=True, null=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    date_published = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'News'
+        verbose_name_plural = 'News'
+
+    def __str__(self):
+        return f'{self.header}:{self.author}'

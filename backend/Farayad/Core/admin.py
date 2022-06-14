@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Category, Course, Season, Comment
+from .models import User, Category, Course, Season, Comment, News
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -61,3 +61,23 @@ class CommentAdmin(admin.ModelAdmin):
 
     class Meta:
         ordering = ('date_published','course')
+
+
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display= ('header', 'author')
+    list_filter= ('date_published', 'date_modified')
+    search_fields = ('header',)
+
+    class Meta:
+        ordering = ('date_modified','header', 'author')
+    
+    def get_form(self, request, obj=None, **kwargs):
+        form=super().get_form(request, obj, **kwargs)
+        print(obj)
+        if obj == None:
+            form.base_fields['author'].queryset = User.objects.filter(username=request.user.username)
+        else:
+            form.base_fields['author'].queryset = User.objects.filter(username=obj.author.username)
+        return form
