@@ -36,6 +36,9 @@ class CourseAdmin(admin.ModelAdmin):
     
     def get_form(self, request, obj=None, **kwargs):
         form=super().get_form(request, obj, **kwargs)
-
-
+        print(obj)
+        if obj == None:
+            form.base_fields['author'].queryset = User.objects.filter(username=request.user.username)
+        else:
+            form.base_fields['author'].queryset = User.objects.filter(username=obj.author.username)
         return form
