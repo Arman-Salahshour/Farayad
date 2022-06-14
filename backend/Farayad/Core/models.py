@@ -3,7 +3,7 @@ from time import time
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from pkg_resources import Requirement
-
+from django_quill.fields import QuillField
 
 
 class UserManager(BaseUserManager):
@@ -71,7 +71,7 @@ class Category(models.Model):
 
 class Course(models.Model):
     header= models.CharField(max_length=120, unique=True, blank=False, null=False)
-    description= models.TextField(blank=True, null=True)
+    description= QuillField()
     category= models.ForeignKey(Category, on_delete=models.CASCADE, )
     author= models.ForeignKey(User, on_delete=models.CASCADE, )
     time= models.IntegerField(default=0)
