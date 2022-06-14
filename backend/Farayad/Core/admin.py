@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Category, Course, Season
+from .models import User, Category, Course, Season, Comment
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -51,3 +51,13 @@ class SeasonAdmin(admin.ModelAdmin):
 
     class Meta:
         ordering = ('course','date_modified')
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display= ('course', 'user')
+    list_filter= ('date_published',)
+    search_fields = ('course', 'user')
+
+    class Meta:
+        ordering = ('date_published','course')

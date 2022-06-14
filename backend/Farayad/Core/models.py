@@ -95,3 +95,15 @@ class Season(models.Model):
 
     def __str__(self):
         return f'{self.course.header}:{self.header}'
+
+
+class Comment(models.Model):
+    text=models.TextField(blank=False, null=False)
+    user=models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    course=models.ForeignKey(Course, on_delete=models.CASCADE)
+    date_published = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.course.header}:{self.user}'
+
+
