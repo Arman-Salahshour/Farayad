@@ -82,4 +82,16 @@ class Course(models.Model):
     date_published = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.header}: {self.author}'
+        return f'{self.header}:{self.author}'
+
+
+class Season(models.Model):
+    header = models.CharField(max_length=120, blank=False, null=False)
+    description= QuillField()
+    video=models.CharField(max_length=400, blank=True, null=True)
+    course=models.ForeignKey(Course, on_delete=models.CASCADE, blank=False, null=False)
+    date_modified = models.DateTimeField(auto_now=True)
+    date_published = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.course.header}:{self.header}'

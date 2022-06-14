@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Category, Course
+from .models import User, Category, Course, Season
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -42,3 +42,12 @@ class CourseAdmin(admin.ModelAdmin):
         else:
             form.base_fields['author'].queryset = User.objects.filter(username=obj.author.username)
         return form
+
+@admin.register(Season)
+class SeasonAdmin(admin.ModelAdmin):
+    list_display= ('header', 'course')
+    list_filter= ('date_published', 'date_modified')
+    search_fields = ('header', 'course')
+
+    class Meta:
+        ordering = ('course','date_modified')
