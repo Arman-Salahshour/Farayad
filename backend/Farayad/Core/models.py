@@ -72,12 +72,14 @@ class Category(models.Model):
 class Course(models.Model):
     header= models.CharField(max_length=120, unique=True, blank=False, null=False)
     description= models.TextField(blank=True, null=True)
-    category= models.ForeignKey(Category, on_delete=models.CASCADE)
-    author= models.ForeignKey(User, on_delete=models.CASCADE)
+    category= models.ForeignKey(Category, on_delete=models.CASCADE, )
+    author= models.ForeignKey(User, on_delete=models.CASCADE, )
     time= models.IntegerField(default=0)
     price=models.FloatField(default=0.0)
     logo=models.CharField(max_length=400, blank=True, null=True)
     requirements= models.TextField(blank=True, null=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    date_published = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.header}: {self.author}'
