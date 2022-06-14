@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Category
+from .models import User, Category, Course
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -24,3 +24,18 @@ admin.site.register(User, CustomUserAdmin)
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display= ('header', 'author')
+    list_filter= ('date_published', 'date_modified')
+    search_fields = ('header',)
+
+    class Meta:
+        ordering = ('date_modified','header', 'author')
+    
+    def get_form(self, request, obj=None, **kwargs):
+        form=super().get_form(request, obj, **kwargs)
+
+
+        return form
