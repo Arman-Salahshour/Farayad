@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Category, Course, Season, Comment, News
+from .models import User, Category, Course, Season, Comment, News, Payment
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -81,3 +81,14 @@ class NewsAdmin(admin.ModelAdmin):
         else:
             form.base_fields['author'].queryset = User.objects.filter(username=obj.author.username)
         return form
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display= ('course', 'purchaser')
+    list_filter= ('date_purchased',)
+    search_fields = ('course', 'purchaser')
+
+    class Meta:
+        ordering = ('date_purchased','course')
+

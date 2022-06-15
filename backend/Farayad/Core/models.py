@@ -121,3 +121,15 @@ class News(models.Model):
 
     def __str__(self):
         return f'{self.header}:{self.author}'
+
+
+class Payment(models.Model):
+    purchaser= models.ForeignKey(User, on_delete=models.CASCADE)
+    course= models.ForeignKey(Course, on_delete=models.CASCADE)
+    date_purchased = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('purchaser', 'course'),)
+
+    def __str__(self):
+        return f'{self.course.header}:{self.purchaser}'
