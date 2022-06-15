@@ -93,6 +93,9 @@ class Season(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     date_published = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = (('course', 'header'),)
+        
     def __str__(self):
         return f'{self.course.header}:{self.header}'
 
