@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'django_quill',
     'Core',
     'User',
@@ -141,6 +142,6 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ['Bearer',],
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(seconds=30),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(minutes=1),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=2),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(minutes=4),
 }

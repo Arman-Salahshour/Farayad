@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework import status
+from rest_framework import views
 from rest_framework.response import Response
 from rest_framework import generics, mixins
 from rest_framework import authentication, permissions
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from Core.models import User
 from .serializers import RegisterUser_serializer
 # Create your views here.
@@ -33,3 +34,20 @@ class  RegisterUser(generics.GenericAPIView, mixins.CreateModelMixin):
 
 
 
+# """Logout"""
+class LogoutUser(views.APIView):
+    # permission_classes = (IsAuthenticated, )
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        refresh_token = data.get('refresh_token')
+        
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+            
+        except Exception as e:
+            return Response(data={
+                'message': 'Token is invalid or expired'
+            },status=status.HTTP_400_BAD_REQUEST)
