@@ -57,10 +57,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
+class GeneralCategory(models.Model):
+    name= models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = 'general category'
+        verbose_name_plural = 'general categories'
+
+    def __str__(self):
+        return self.name   
+
 
 class Category(models.Model):
     name= models.CharField(max_length=100)
-
+    parent_category= models.ForeignKey(GeneralCategory, on_delete=models.CASCADE, )
     class Meta:
         verbose_name = 'category'
         verbose_name_plural = 'categories'
