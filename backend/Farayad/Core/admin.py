@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Category, Course, Season, Comment, News, Payment
+from .models import User, Category, GeneralCategory, Course, Season, Comment, News, Payment
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -21,8 +21,13 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(User, CustomUserAdmin)
 
-@admin.register(Category)
+
+@admin.register(GeneralCategory)
 class CategoryAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Category)
+class SubCategoryAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Course)
