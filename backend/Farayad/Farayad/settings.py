@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_quill',
     'Core',
     'User',
+    'testAPIs',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +143,6 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ['Bearer',],
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=2),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(minutes=4),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(minutes=20),
 }
