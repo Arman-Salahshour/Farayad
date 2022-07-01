@@ -1,12 +1,12 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework import generics, mixins
-from rest_framework import authentication, permissions
+from rest_framework import permissions
+from Core import token_authentications
 from rest_framework_simplejwt.tokens import RefreshToken
 from Core.models import User
-from .serializers import RegisterUser_serializer
+from .serializers import RegisterUser_serializer, UserFullSerializer
 # Create your views here.
 
 class  RegisterUser(generics.GenericAPIView, mixins.CreateModelMixin):
@@ -51,3 +51,16 @@ class LogoutUser(views.APIView):
             return Response(data={
                 'message': 'Token is invalid or expired'
             },status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetUserInformation(views.APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (token_authentications.Authentication, )
+
+    def get(self, request, *args, **kwargs):
+        user = request.user.id
+        user = User.objects.get(id=user)
+        serializer = UserFullSerializer(user)
+
+        return Response(serializer.data, status = status.HTTP_200_OK)
+

@@ -26,3 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'email',
         )
+
+class UserFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
