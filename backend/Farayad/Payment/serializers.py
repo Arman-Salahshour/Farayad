@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Payment
+from User.serializers import UserSerializer
 
 def change_date_format(object):
     if object is None:
@@ -15,10 +16,11 @@ def change_date_format(object):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(source = 'purchaser')
     _date_purchased = serializers.SerializerMethodField()
     class Meta:
         model = Payment
-        fields = ('purchaser',
+        fields = ('user',
                   'course',
                   '_date_purchased')
 
