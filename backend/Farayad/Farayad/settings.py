@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_quill',
     'Core',
     'User',
+    'Payment',
     'testAPIs',
 ]
 
