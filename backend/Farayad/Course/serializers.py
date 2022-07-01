@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Course
-
+from User.serializers import UserSerializer
 
 def change_date_format(object, how):
     if object is None:
@@ -16,6 +16,7 @@ class CourseSerializerWithDesc(serializers.ModelSerializer):
     description_text = serializers.SerializerMethodField()
     _date_modified = serializers.SerializerMethodField()
     _date_published = serializers.SerializerMethodField()
+    _author = UserSerializer(source = 'author')
 
     def get_description_text(self, object):
         html = object.description.html
@@ -34,7 +35,7 @@ class CourseSerializerWithDesc(serializers.ModelSerializer):
                     'id',
                     'header',
                     'category',
-                    'author',
+                    '_author',
                     'time',
                     'price',
                     'logo',
@@ -53,7 +54,7 @@ class CourseSerializerWithoutDesc(CourseSerializerWithDesc):
                     'id',
                     'header',
                     'category',
-                    'author',
+                    '_author',
                     'time',
                     'price',
                     'logo',
