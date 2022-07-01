@@ -16,3 +16,13 @@ class RegisterUser_serializer(serializers.ModelSerializer):
         password = validated_data.get('password')
 
         return User.objects.create_user(username=username, email=email, password=password)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'email',
+        )
