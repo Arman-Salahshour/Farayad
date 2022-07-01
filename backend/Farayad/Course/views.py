@@ -9,17 +9,30 @@ from .models import Course
 # Create your views here.
 
 '''
-requests: course/list/?page=_
-requests: course/list/?ordering=column_name :: ascending order
-requests: course/list/?ordering=-column_name :: descending order
-requests: course/item/<str:header>
+request: course/list/?page=_
+request: course/list/?cat=category
+request: course/list/?ordering=column_name :: ascending order
+request: course/list/?ordering=-column_name :: descending order
+request: course/item/<str:header>
 '''
+
+
+class CategoryFilter(filters.BaseFilterBackend):
+    """
+    Filter courses base on categories
+    """
+    def filter_queryset(self, request, queryset, view):
+        category = request.query_params.get('cat')
+        if category:
+            return queryset.filter(category=category)
+        return queryset
+
 
 class CourseListView(generics.GenericAPIView, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     queryset = Course.objects.all()
     serializer_class = CourseSerializerWithoutDesc
     pagination_class = CustomizePagination
-    filter_backends = [filters.OrderingFilter]
+    filter_backends = (filters.OrderingFilter, CategoryFilter, )
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -33,3 +46,6 @@ class CourseView(generics.GenericAPIView, mixins.RetrieveModelMixin):
     def get(self, request, *args, **kwargs):
         self.header = kwargs.get('header', None)
         return self.retrieve(request, *args, **kwargs)
+
+
+
