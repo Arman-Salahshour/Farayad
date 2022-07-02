@@ -3,14 +3,9 @@ from .models import Season
 from Course.serializers import change_date_format
 
 class SeasonSerializer(serializers.ModelSerializer):
-    description_text = serializers.SerializerMethodField()
+    
     _date_modified = serializers.SerializerMethodField()
     _date_published = serializers.SerializerMethodField()
-
-    def get_description_text(self, object):
-        html = object.description.html
-        html = html.replace('"', "'")
-        return html
     
     def get__date_published(self, object):
        return change_date_format(object, 'published')
@@ -20,13 +15,22 @@ class SeasonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Season
-        fields = ('header',
+        fields = (
+                  'id',
+                  'header',
                   'course',
                   '_date_modified',
-                  '_date_published',)
+                  '_date_published',
+                  )
 
 
 class SpecificSeasonSerializer(SeasonSerializer):
+
+    description_text = serializers.SerializerMethodField()
+    def get_description_text(self, object):
+        html = object.description.html
+        html = html.replace('"', "'")
+        return html
 
     class Meta:
         model = Season
