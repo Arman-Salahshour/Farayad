@@ -11,6 +11,15 @@ from .serializers import RegisterUser_serializer, UserFullSerializer
 from django.contrib.auth.hashers import check_password
 # Create your views here.
 
+'''
+request: user/register/
+request: user/login/ => post method{username, password}
+request: login/refresh/ => post method{refresh}
+request: user/logout/ =>post method{refresh} if there is JWT COOKIE just send a post request with empty body.
+request: user/info/ => get method(if there is no JWT COOKIE set {Authorization: 'Bearer access token'})
+request: user/update/ put method(you can change user information with this endpoint)
+'''
+
 def Check_Password(obj, request):
     match = check_password(obj.password, request.date.get('password'))
     return match
@@ -46,7 +55,7 @@ class LogoutUser(views.APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        refresh_token = data.get('refresh_token')
+        refresh_token = data.get('refresh')
         
         try:
             token = RefreshToken(refresh_token)
