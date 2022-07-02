@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,Permissi
 from pkg_resources import Requirement
 from django_quill.fields import QuillField
 
-
 class UserManager(BaseUserManager):
 
     def create_user(self,username,email,password,**extra_fields):
@@ -17,7 +16,8 @@ class UserManager(BaseUserManager):
         if not password:
             raise ValueError("You must set an password")
 
-
+        extra_fields.setdefault('is_staff',True)
+        extra_fields.setdefault('is_active',True)
         email = self.normalize_email(email)
         user=self.model(username=username,email=email,**extra_fields)
         user.set_password(password)
@@ -39,13 +39,17 @@ class UserManager(BaseUserManager):
         self.create_user(username,email,password,**extra_fields)
 
 
+
+def user_directory_path(instance, filename):
+    return f'{filename}'
+
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(unique=True, max_length=50)
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(unique=True, max_length=50, blank=False, null=False)
-    image = models.CharField(max_length=400, blank=True, null=True)
+    image = models.ImageField(upload_to= user_directory_path, blank=True, null=True)
     is_superuser=models.BooleanField(default=False)
     is_staff=models.BooleanField(default=False)
     is_active=models.BooleanField(default=False)

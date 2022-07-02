@@ -15,7 +15,6 @@ class RegisterUser_serializer(serializers.ModelSerializer):
         email = validated_data.get('email')
         password = validated_data.get('password')
         image = validated_data.get('image')
-
         return User.objects.create_user(username=username, email=email, password=password, image=image)
 
 
