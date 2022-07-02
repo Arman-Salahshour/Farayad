@@ -6,10 +6,10 @@ from Core.token_views import ( ModifiedTokenObtainPairView as TokenObtainPairVie
 # from Core.token_views import TokenRefreshView
 
 urlpatterns = [
-    path('register', RegisterUser.as_view()),
-    path('login', TokenObtainPairView.as_view()),
-    path('login/refresh', TokenRefreshView.as_view()),
-    path('logout', LogoutUser.as_view()),
-    path('info', GetUserInformation.as_view()),
-    path('update', ChangeUserInformation.as_view()),
+    path('register/', RegisterUser.as_view()),
+    path('login/', TokenObtainPairView.as_view()),
+    path('login/refresh/', TokenRefreshView.as_view()),
+    path('logout/', LogoutUser.as_view()),
+    path('info/', GetUserInformation.as_view()),
+    path('update/', ChangeUserInformation.as_view()),
 ]
