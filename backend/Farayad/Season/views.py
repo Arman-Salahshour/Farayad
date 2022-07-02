@@ -8,6 +8,11 @@ from Core.token_authentications import Authentication
 from .models import Course, Season, Payment
 
 # Create your views here.
+'''
+request: season/list/<int:course_id>
+request: season/item/<int:season_id>
+'''
+
 
 class SeasonsListView(generics.GenericAPIView, mixins.ListModelMixin):
     queryset = Season.objects.all()
@@ -33,12 +38,14 @@ class SeasonView(generics.GenericAPIView, mixins.RetrieveModelMixin):
         user = request.user
         season_id = kwargs.pop('pk')
         course = Season.objects.get(id = season_id).course
-        payment = Payment.objects.filter(purchaser = user, course = course)
+        author = Course.objects.get(id = course.id).author.id
         
-        if len(payment) == 0:
-            return Response({
-                'message': 'You must first purchase this course in order to access it.'} , 
-                 status = status.HTTP_404_NOT_FOUND)
+        if user.id != author:
+            payment = Payment.objects.filter(purchaser = user, course = course)
+            if len(payment) == 0:
+                return Response({
+                    'message': 'You must first purchase this course in order to access it.'} , 
+                    status = status.HTTP_404_NOT_FOUND)
         
         return self.retrieve(request, *args, **kwargs)
 
