@@ -40,8 +40,8 @@ class UserManager(BaseUserManager):
 
 
 
-def user_directory_path(instance, filename):
-    return f'{filename}'
+def user_directory_path(instance,filename):
+    return f'users/{filename}'
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(unique=True, max_length=50)
@@ -83,6 +83,8 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+def course_directory_path(instance,filename):
+    return f'courses/{filename}'
 
 class Course(models.Model):
     header= models.CharField(max_length=120, unique=True, blank=False, null=False)
@@ -91,7 +93,7 @@ class Course(models.Model):
     author= models.ForeignKey(User, on_delete=models.CASCADE, )
     time= models.IntegerField(default=0)
     price=models.FloatField(default=0.0)
-    logo=models.CharField(max_length=400, blank=True, null=True)
+    logo=models.ImageField(upload_to= course_directory_path, blank=True, null=True)
     requirements= models.TextField(blank=True, null=True)
     date_modified = models.DateTimeField(auto_now=True)
     date_published = models.DateTimeField(auto_now_add=True)
@@ -124,12 +126,14 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.course.header}:{self.user}'
 
+def news_directory_path(instance,filename):
+    return f'news/{filename}'
 
 class News(models.Model):
     header= models.CharField(max_length=120, unique=True, blank=False, null=False)
     description= QuillField()
     author= models.ForeignKey(User, on_delete=models.CASCADE, )
-    logo=models.CharField(max_length=400, blank=True, null=True)
+    logo=models.ImageField(upload_to= news_directory_path, blank=True, null=True)
     date_modified = models.DateTimeField(auto_now=True)
     date_published = models.DateTimeField(auto_now_add=True)
 
