@@ -128,3 +128,14 @@ class ChangeUserInformation(generics.GenericAPIView, mixins.UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
             return self.partial_update(request, *args, **kwargs)
+
+
+class UserState(views.APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (token_authentications.Authentication, )
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        return Response({
+            'message': 'admin' if user.is_superuser else 'ordinary'
+        }, status = status.HTTP_200_OK)
