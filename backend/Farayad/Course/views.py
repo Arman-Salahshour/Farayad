@@ -13,7 +13,7 @@ request: course/list/?page=_
 request: course/list/?cat=category
 request: course/list/?ordering=column_name :: ascending order
 request: course/list/?ordering=-column_name :: descending order
-request: course/list/?search=(str)?search_field=column_name?search_field=...
+request: course/list/?search=(str)&search_field=column_name&search_field=...
 request: course/item/<str:header>
 '''
 
