@@ -13,11 +13,11 @@ def change_date_format(date):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(source = 'purchaser')
+    _purchaser = UserSerializer(source = 'purchaser')
     _date_purchased = serializers.SerializerMethodField()
     class Meta:
         model = Payment
-        fields = ('user',
+        fields = ('_purchaser',
                   'course',
                   '_date_purchased')
 
@@ -25,3 +25,10 @@ class PaymentSerializer(serializers.ModelSerializer):
         if object is None:
             return None  
         return change_date_format(object.date_purchased)
+
+class PaymentPostSerializer(PaymentSerializer):
+    class Meta:
+        model = Payment
+        fields = ('purchaser',
+                  'course',
+                  '_date_purchased')
