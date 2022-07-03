@@ -13,6 +13,16 @@ request: season/list/<int:course_id>
 request: season/item/<int:season_id>
 '''
 
+def access_course(user, author, course, Payment):
+        if user.id != author:
+            payment = Payment.objects.filter(purchaser = user, course = course)
+            if len(payment) == 0:
+                return Response({
+                    'message': 'You must first purchase this course in order to access it.'} , 
+                    status = status.HTTP_404_NOT_FOUND)
+        else: 
+            return True
+
 
 class SeasonsListView(generics.GenericAPIView, mixins.ListModelMixin):
     queryset = Season.objects.all()
@@ -39,13 +49,16 @@ class SeasonView(generics.GenericAPIView, mixins.RetrieveModelMixin):
         season_id = kwargs.pop('pk')
         course = Season.objects.get(id = season_id).course
         author = Course.objects.get(id = course.id).author.id
-        
-        if user.id != author:
-            payment = Payment.objects.filter(purchaser = user, course = course)
-            if len(payment) == 0:
-                return Response({
-                    'message': 'You must first purchase this course in order to access it.'} , 
-                    status = status.HTTP_404_NOT_FOUND)
-        
-        return self.retrieve(request, *args, **kwargs)
+        result = access_course(user, author, course, Payment)
+        if result == True:
+            return self.retrieve(request, *args, **kwargs)
+        else:
+            return result
 
+
+        # if user.id != author:
+        #     payment = Payment.objects.filter(purchaser = user, course = course)
+        #     if len(payment) == 0:
+        #         return Response({
+        #             'message': 'You must first purchase this course in order to access it.'} , 
+        #             status = status.HTTP_404_NOT_FOUND)
