@@ -2,11 +2,8 @@ from rest_framework import serializers
 from .models import Payment
 from User.serializers import UserSerializer
 
-def change_date_format(object):
-    if object is None:
-        return None  
-        
-    date = object.date_purchased
+def change_date_format(date):
+
     if date.minute/10 > 1:
         date = f"{date.date().isoformat()} {date.hour}:{date.minute}"
     else:
@@ -25,4 +22,6 @@ class PaymentSerializer(serializers.ModelSerializer):
                   '_date_purchased')
 
     def get__date_purchased(self,object):
-        return change_date_format(object)
+        if object is None:
+            return None  
+        return change_date_format(object.date_purchased)
