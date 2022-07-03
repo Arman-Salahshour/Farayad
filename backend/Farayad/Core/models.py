@@ -18,6 +18,7 @@ class UserManager(BaseUserManager):
 
         extra_fields.setdefault('is_staff',True)
         extra_fields.setdefault('is_active',True)
+        extra_fields.setdefault('is_volunteer',False)
         email = self.normalize_email(email)
         user=self.model(username=username,email=email,**extra_fields)
         user.set_password(password)
@@ -53,6 +54,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser=models.BooleanField(default=False)
     is_staff=models.BooleanField(default=False)
     is_active=models.BooleanField(default=False)
+    is_volunteer=models.BooleanField(default=False)
+
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
