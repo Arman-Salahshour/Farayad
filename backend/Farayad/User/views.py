@@ -17,7 +17,10 @@ request: user/login/ => post method{username, password}
 request: login/refresh/ => post method{refresh}
 request: user/logout/ =>post method{refresh} if there is JWT COOKIE just send a post request with empty body.
 request: user/info/ => get method(if there is no JWT COOKIE set {Authorization: 'Bearer access token'})
-request: user/update/ put method(you can change user information with this endpoint)
+request: user/update/ => put method(you can change user information with this endpoint)
+request: user/state/ => get method(if user is admin, it will return 'admin' else if user is ordinary but volunteer 
+                        for being admin, it will return 'ordinary but volunteer' else it will return 'ordinary')
+request: user/volun/ => get method for requesting to be an admin.
 '''
 
 def Check_Password(obj, request):
@@ -137,5 +140,18 @@ class UserState(views.APIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         return Response({
-            'message': 'admin' if user.is_superuser else 'ordinary'
+            'message': 'admin' if user.is_superuser else 'ordinary but volunteer' if user.is_volunteer else 'ordinary'
+        }, status = status.HTTP_200_OK)
+
+
+class AdminRequestHandler(UserState):
+    
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_superuser == False:
+            user.is_volunteer = True
+            user.save()
+
+        return Response({
+            'message': 'admin' if user.is_superuser else 'ordinary but volunteer' if user.is_volunteer else 'ordinary'
         }, status = status.HTTP_200_OK)

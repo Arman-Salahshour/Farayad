@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import RegisterUser, LogoutUser, GetUserInformation, ChangeUserInformation, UserState
+from .views import RegisterUser, LogoutUser, GetUserInformation, ChangeUserInformation, UserState, AdminRequestHandler
 from Core.token_views import ( ModifiedTokenObtainPairView as TokenObtainPairView,
                                 ModifiedTokenRefreshView as TokenRefreshView )
 # from Core.token_views import TokenRefreshView
@@ -13,4 +13,5 @@ urlpatterns = [
     path('info/', GetUserInformation.as_view()),
     path('update/', ChangeUserInformation.as_view()),
     path('state/', UserState.as_view()),
+    path('volun/', AdminRequestHandler.as_view()),
 ]
