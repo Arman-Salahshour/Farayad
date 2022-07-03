@@ -8,6 +8,12 @@ from rest_framework.permissions import IsAuthenticated
 from Core.token_authentications import Authentication
 from Season.views import access_course
 # Create your views here.
+
+'''
+request: comment/list/<int:pk> => pk is course's id
+request: comment/send/ => post method
+'''
+
 class CommentView(generics.GenericAPIView, mixins.ListModelMixin):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer

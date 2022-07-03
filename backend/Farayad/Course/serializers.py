@@ -7,7 +7,11 @@ def change_date_format(object, how):
         return None  
         
     date = object.date_published if how =="published" else object.date_modified
-    date = f"{date.date().isoformat()} {date.hour}:{date.minute}"
+
+    if date.minute/10 > 1:
+        date = f"{date.date().isoformat()} {date.hour}:{date.minute}"
+    else:
+        date = f"{date.date().isoformat()} {date.hour}:0{date.minute}"
 
     return date
 

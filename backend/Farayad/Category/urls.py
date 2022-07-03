@@ -4,6 +4,6 @@ from .views import CategoriesListView, SubCategoriesView
 
 urlpatterns = [
     path('', CategoriesListView.as_view()),
-    path('sub', SubCategoriesView.as_view()),
-    path('sub/<int:pk>', SubCategoriesView.as_view()),
+    path('sub/', SubCategoriesView.as_view()),
+    path('sub/<int:pk>/', SubCategoriesView.as_view()),
 ]
