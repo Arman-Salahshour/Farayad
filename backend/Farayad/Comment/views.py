@@ -24,3 +24,28 @@ class CommentListView(CommentView):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+
+class CommentPost(CommentView, mixins.CreateModelMixin):
+    serializer_class = PostCommentSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (Authentication, )
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        data = request.data
+        
+        course_id = data.get('course')
+        course = Course.objects.get(id = course_id)
+        author = course.author.id
+
+        if user.id == int(data.get('user')):
+            print(user.id, data.get('user'))
+            result = access_course(user, author, course, Payment)
+            if result == True:
+                return self.create(request, *args, **kwargs)
+            else:
+                return result
+        else:
+            return Response({
+                'message': 'The comment can only be registered by the user who sends the request.'
+            }, status = status.HTTP_201_CREATED)

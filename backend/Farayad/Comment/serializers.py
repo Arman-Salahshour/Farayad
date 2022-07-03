@@ -23,3 +23,13 @@ class CommentSerializer(serializers.ModelSerializer):
                   '_date_published',
                   )
 
+class PostCommentSerializer(CommentSerializer):
+    class Meta:
+        model = Comment
+        fields = (
+                  'id',
+                  'text',
+                  'user',
+                  'course',
+                  '_date_published',
+                  )
