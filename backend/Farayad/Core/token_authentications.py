@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 class Authentication(JWTAuthentication):
 
     def get_COOKIES_token(self,request):
@@ -19,6 +19,10 @@ class Authentication(JWTAuthentication):
             return None
 
         validated_token = self.get_validated_token(raw_token)
-
+        blackList=BlacklistedToken.objects.filter(token__token=validated_token)
+        
+        if len(blackList) != 0:
+            return None
+            
         return self.get_user(validated_token), validated_token
 

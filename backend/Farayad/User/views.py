@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import generics, mixins
 from rest_framework import permissions
 from Core import token_authentications
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken, BlacklistMixin
 from Core.models import User
 from .serializers import RegisterUser_serializer, UserFullSerializer
 from django.contrib.auth.hashers import check_password
@@ -50,17 +50,31 @@ class RegisterUser(generics.GenericAPIView, mixins.CreateModelMixin):
 
 
 # """Logout"""
+
+class ModifiedAccessToken(AccessToken, BlacklistMixin):
+    pass
+
 class LogoutUser(views.APIView):
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (token_authentications.Authentication, )
 
     def post(self, request, *args, **kwargs):
         data = request.data
         refresh_token = data.get('refresh')
-        
+        access_token = data.get('access')
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+
+            token = ModifiedAccessToken(access_token)
+            token.blacklist()
+
+            response = Response(data={
+                'message': 'User has loged out'
+            },status=status.HTTP_205_RESET_CONTENT)
+
+            response.delete_cookie('jwt')
+            return response
             
         except Exception as e:
             return Response(data={
