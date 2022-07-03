@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'User',
     'Payment',
     'Season',
+    'Comment',
     'testAPIs',
 ]
 
