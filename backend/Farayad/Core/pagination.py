@@ -4,6 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 '''Override page_size_query_param attribute of PageNumberPagination'''
 class CustomizePagination(PageNumberPagination):
     page_size_query_param = 'limit'
+    page_size = 10
 
 
 """Pagination Handler"""
