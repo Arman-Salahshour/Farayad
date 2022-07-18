@@ -20,6 +20,8 @@ def access_course(user, author, course, Payment):
                 return Response({
                     'message': 'You must first purchase this course in order to access it.'} , 
                     status = status.HTTP_404_NOT_FOUND)
+            else:
+                True
         else: 
             return True
 
