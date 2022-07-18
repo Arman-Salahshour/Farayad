@@ -8,7 +8,7 @@ from Core import token_authentications
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken, BlacklistMixin
 from Core.models import User
 from .serializers import RegisterUser_serializer, UserFullSerializer
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 # Create your views here.
 
 '''
@@ -24,7 +24,7 @@ request: user/volun/ => get method for requesting to be an admin.
 '''
 
 def Check_Password(obj, request):
-    match = check_password(obj.password, request.date.get('password'))
+    match = check_password( request.data.get('current_password'), obj.password)
     return match
 
 class RegisterUser(generics.GenericAPIView, mixins.CreateModelMixin):
@@ -118,8 +118,15 @@ class ChangeUserInformation(generics.GenericAPIView, mixins.UpdateModelMixin):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.filter_queryset(self.get_queryset())[0]
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        data = request.data
+
+        if data.get('password', None) != None:
+            data._mutable = True
+            data.update({'password':make_password(data.get('password')),})
+
+        serializer = self.get_serializer(instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
+        
         self.perform_update(serializer)
 
         if getattr(instance, '_prefetched_objects_cache', None):
@@ -129,8 +136,8 @@ class ChangeUserInformation(generics.GenericAPIView, mixins.UpdateModelMixin):
 
         return Response(serializer.data)
 
-    def put(self, request, *args, **kwargs):
-            return self.partial_update(request, *args, **kwargs)
+    def put(self, request, *args, **kwargs):   
+        return self.partial_update(request, *args, **kwargs)
 
 
 class UserState(views.APIView):
