@@ -53,3 +53,5 @@ class CourseView(generics.GenericAPIView, mixins.RetrieveModelMixin):
         return self.retrieve(request, *args, **kwargs)
 
 
+class CourseViewWithId(CourseView):
+    lookup_field = 'id'
